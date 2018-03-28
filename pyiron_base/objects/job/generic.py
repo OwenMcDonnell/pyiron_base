@@ -140,8 +140,7 @@ class GenericJob(JobCore):
         for sig in intercepted_signals:
             signal.signal(sig,  self.signal_intercept)
 
-
-    def signal_intercept(self,sig,frame):
+    def signal_intercept(self, sig, frame):
         try:
             self._logger.info('Job {} intercept signal {}, job is shutting down'.format(self._job_id, sig))
             self.drop_status_to_aborted()
@@ -704,6 +703,7 @@ class GenericJob(JobCore):
         self._server.to_hdf(self._hdf5)
         with self._hdf5.open('input') as hdf_input:
             hdf_input["restart_file_list"] = self._restart_file_list
+        super(GenericJob, self).to_hdf(hdf=hdf, group_name=group_name)
 
     def from_hdf(self, hdf=None, group_name=None):
         """
@@ -718,6 +718,7 @@ class GenericJob(JobCore):
         with self._hdf5.open('input') as hdf_input:
             if "restart_file_list" in hdf_input.list_nodes():
                 self._restart_file_list = hdf_input["restart_file_list"]
+        super(GenericJob, self).from_hdf(hdf=hdf, group_name=group_name)
 
     def save(self):
         """

@@ -95,6 +95,30 @@ class JobCore(PyIronObject):
         self._parent_id = None
         self._master_id = None
         self._status = None
+        self._info = {}
+
+    @property
+    def info(self):
+        """
+        Get info dictionary
+
+        Returns:
+            dict: info dict
+        """
+        return self._info
+
+    @info.setter
+    def info(self, info_dict):
+        """
+        Set info dictionary
+
+        Args:
+            info_dict (dict): info dictionary
+        """
+        if isinstance(info_dict, dict):
+            self._info = info_dict
+        else:
+            raise TypeError('info should be a dict()')
 
     @property
     def job_name(self):
@@ -686,27 +710,29 @@ class JobCore(PyIronObject):
         """
         raise NotImplementedError("save() should be implemented in the derived class")
 
-    def to_hdf(self, hdf, group_name="group"):
+    def to_hdf(self, hdf=None, group_name=None):
         """
-        Store object in hdf5 format - The function has to be implemented by the derived classes
-        - usually the GenericJob class
+        Store the GenericJob in an HDF5 file
 
         Args:
-            hdf (ProjectHDFio): Optional hdf5 file, otherwise self is used.
-            group_name (str): Optional hdf5 group in the hdf5 file.
+            hdf (ProjectHDFio): HDF5 group object - optional
+            group_name (str): HDF5 subgroup name - optional
         """
-        raise NotImplementedError("to_hdf() should be implemented in the derived class")
+        if len(self._info) == 0:
+            with self._hdf5.open('input') as hdf_input:
+                hdf_input["info"] = self._info
 
-    def from_hdf(self, hdf, group_name="group"):
+    def from_hdf(self, hdf=None, group_name=None):
         """
-        Restore object from hdf5 format - The function has to be implemented by the derived classes
-        - usually the GenericJob class
+        Restore the GenericJob from an HDF5 file
 
         Args:
-            hdf (ProjectHDFio): Optional hdf5 file, otherwise self is used.
-            group_name (str): Optional hdf5 group in the hdf5 file.
+            hdf (ProjectHDFio): HDF5 group object - optional
+            group_name (str): HDF5 subgroup name - optional
         """
-        raise NotImplementedError("from_hdf() should be implemented in the derived class")
+        with self._hdf5.open('input') as hdf_input:
+            if "info" in hdf_input.list_nodes():
+                self._info = hdf_input["info"]
 
     def __del__(self):
         """
