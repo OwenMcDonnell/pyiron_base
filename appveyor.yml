@@ -46,9 +46,9 @@ install:
 # Load the conda root environment, configure and install some packages
 - '"%CONDA%\Scripts\activate.bat"'
 - "conda config --set always_yes yes --set changeps1 no"
-#- "conda update -q conda"
+- "conda update -q conda"
 - "conda config --add channels pyiron"
-- "conda install conda-build anaconda-client pytables numpy"
+#- "conda install conda-build anaconda-client pytables numpy"
 - "conda config --set anaconda_upload yes"
 - "conda info -a"
 
