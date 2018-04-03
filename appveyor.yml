@@ -9,14 +9,14 @@ environment:
     PROJECT_NAME: pyiron_base
 
   matrix:
-    - PYTHON_VERSION: 2.7
-      CONDA: C:\Miniconda
+    #- PYTHON_VERSION: 2.7
+     # CONDA: C:\Miniconda
 
     - PYTHON_VERSION: 3.5
       CONDA: C:\Miniconda35
 
-    - PYTHON_VERSION: 3.6
-      CONDA: C:\Miniconda36
+    #- PYTHON_VERSION: 3.6
+     # CONDA: C:\Miniconda36
 
 version: '{build}'
 image: Visual Studio 2015
@@ -26,9 +26,10 @@ image: Visual Studio 2015
 
 platform:
 - x86
-- x64
+#- x64
 
 init:
+  
   - ps: if ($Env:PLATFORM -eq "x64") { $Env:CONDA = "${Env:CONDA}-x64" }
   - ps: Write-Host $Env:PYTHON_VERSION
   - ps: Write-Host $Env:CONDA
@@ -50,6 +51,7 @@ install:
 - "conda install conda-build anaconda-client pytables numpy"
 - "conda config --set anaconda_upload yes"
 - "conda info -a"
+- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 - "pip install ."
 
 build: false
