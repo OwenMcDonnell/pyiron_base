@@ -51,13 +51,14 @@ install:
 - "conda install conda-build anaconda-client pytables numpy"
 - "conda config --set anaconda_upload yes"
 - "conda info -a"
-- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 - "pip install ."
 
 build: false
 
 test_script:
   # Build the package
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - "cd tests"
   - "python find_tests.py"
   - "cd .."
