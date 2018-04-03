@@ -51,7 +51,7 @@ install:
 - "conda install conda-build anaconda-client pytables numpy"
 - "conda config --set anaconda_upload yes"
 - "conda info -a"
-- pip --install-options="--lflags=\"-Wl,-rpath,$HDF5_ROOT/lib\" --prefix=$PREFIX" tables install .
+- pip --install-option="--lflags=\"-Wl,-rpath,$HDF5_ROOT/lib\" --prefix=$PREFIX" tables install .
 #- "pip install ."
 
 build: false
