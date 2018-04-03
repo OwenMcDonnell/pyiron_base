@@ -39,5 +39,7 @@ setup(
                       'pandas',
                       'pathlib2',
                       'six',
-                      'sqlalchemy']
+                      'sqlalchemy',
+                      'tables'
+                     ]
     )
